@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <report 
+            id="action_report_exco_payroll_book" 
+            model="excopaie.financial_statement" 
+            string="Livre de paie"
+            report_type="qweb-pdf"
+            name="excopaie.exco_payroll_book_report" 
+            file="excopaie.exco_payroll_book_report"
+        />
+        <report 
+            id="action_report_exco_wage_costs" 
+            model="excopaie.financial_statement" 
+            string="Charges salariales"
+            report_type="qweb-pdf"
+            name="excopaie.exco_wage_costs_report" 
+            file="excopaie.exco_wage_costs_report"
+        />
+        <report 
+            id="action_report_exco_employer_charges" 
+            model="excopaie.financial_statement" 
+            string="Charges patronales"
+            report_type="qweb-pdf"
+            name="excopaie.exco_employer_charges_report" 
+            file="excopaie.exco_employer_charges_report"
+        />
+</odoo>

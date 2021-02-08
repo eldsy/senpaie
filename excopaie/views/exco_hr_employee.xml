@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="exco_hr_employee_view_form" model="ir.ui.view">
+            <field name="name">exco.hr.employee.view.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <!-- find field description and add the field
+                     idea_ids after it -->
+                <xpath expr="//field[@name='spouse_birthdate']" position="replace">
+                    <field name="spouse_with_income" string="Conjoint(e) avec un revenu"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

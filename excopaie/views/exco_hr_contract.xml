@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="exco_hr_contract_view_form" model="ir.ui.view">
+            <field name="name">exco.hr.contract.view.form</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_id']" position="after">
+                    <field name="coefficient" string="Nombre de part TRIMF"/>
+                    <field name="level" string="Nombre de part IR"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='information']/group[@name='main_info']/group[@name='salary_and_advantages']/field[@name='wage_type']" position="after">
+                    <field name="convention_type" options="{&quot;no_create&quot;:true,&quot;no_open&quot;:true}"/>
+                    <field name="convention_category" widget="many2one" domain="[[&quot;convention_type&quot;,&quot;=&quot;,convention_type]]" options="{&quot;no_create&quot;:true,&quot;no_open&quot;:true}" context="{}"/>
+                    <field name="is_executive" string=" Cadre"/>
+                    <field name="base_salary" string="Salaires de base" widget="monetary"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='information']/group[@name='main_info']/group[@name='salary_and_advantages']/label[1]" position="attributes">
+                    <attribute name="string">Sursalaire</attribute>
+                </xpath>
+
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='information']/group[@name='main_info']/group[@name='salary_and_advantages']/field[@name='advantages']" position="after">
+                    <field name="net_salary" widget="monetary"/>
+                    <field name="medical_fees" widget="monetary"/>
+                    <field name="transport_premium" widget="monetary"/>
+                    <field name="reimbursement_expenses" widget="monetary"/>
+                    <field name="loan_repayment" widget="monetary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

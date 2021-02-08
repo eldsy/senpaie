@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="excopaie.convention_categorylist">
+      <field name="name">excopaie.convention_category.view</field>
+      <field name="model">excopaie.convention_category</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="convention_type"/>
+            <field name="name"/>
+            <field name="hourly_wage" widget="monetary"/>
+            <field name="salary_for173h" widget="monetary"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="excopaie.convention_category_action_window">
+      <field name="name">Categories de conventions</field>
+      <field name="res_model">excopaie.convention_category</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face"> Gerer vos categories de conventions ici
+        </p>
+      </field>
+    </record>
+    
+    <!-- server action to the one above -->
+      
+    <record model="ir.actions.server" id="excopaie.convention_catgory_action_server">
+      <field name="name">excopaie categories conventions</field>
+      <field name="model_id" ref="model_excopaie_convention_category"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+    <!-- actions -->
+
+    <menuitem name="Categories de conventions" id="excopaie.convention_category" parent="excopaie.convention_menu" sequence="10"
+              action="excopaie.convention_category_action_window"/>
+      
+  </data>
+</odoo>

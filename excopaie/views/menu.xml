@@ -1,0 +1,12 @@
+<odoo>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Excopaie" id="excopaie.menu_root"/>
+
+    <!-- menu categories -->
+    
+    <menuitem name="Etats" id="excopaie.financial_statement_menu" parent="hr_payroll.menu_hr_payroll_payslips"/>
+
+    <menuitem name="Conventions" id="excopaie.convention_menu" parent="hr.menu_human_resources_configuration"/>
+</odoo>

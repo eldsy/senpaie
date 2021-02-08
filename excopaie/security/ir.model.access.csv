@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_excopaie_convention_type,excopaie.convention_type,model_excopaie_convention_type,base.group_user,1,1,1,1
+access_excopaie_convention_category,excopaie.convention_category,model_excopaie_convention_category,base.group_user,1,1,1,1
+access_excopaie_financial_statement,excopaie.financial_statement,model_excopaie_financial_statement,base.group_user,1,1,1,1

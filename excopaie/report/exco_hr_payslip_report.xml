@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_l10n_fr_fiche_paye" name="fiche de paye" inherit_id="l10n_fr_hr_payroll.report_l10n_fr_fiche_paye">
+            <xpath expr="//div[@class='page']" position="replace">
+                <div class ="page">
+                    <div class="page" style="font-size:0.8em">
+                      <div class="oe_structure"/>
+                      <div class="row">
+                        <div class="col-4">
+                          <table class="table table-round-border">
+                            <tr>
+                              <td>
+                                <div>
+                                  <span t-field="o.company_id.name"/>
+                                </div>
+                                <div>
+                                  <span t-field="o.company_id.street"/>
+                                </div>
+                                <div>
+                                  <span t-field="o.company_id.street2" t-if="o.company_id.street2"/>
+                                </div>
+                                <div>
+                                  <span t-field="o.company_id.city"/>
+                                  <span t-field="o.company_id.state_id"/>
+                                  <span t-field="o.company_id.zip"/>
+                                </div>
+                                <div>
+                                  <span t-field="o.company_id.country_id"/>
+                                </div>
+                                <div t-field="o.employee_id.address_home_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                        <div class="col-8 float-right" style="float:right;text-align:right;">
+                          <h1>Bulletin de paie</h1>
+                          <p>Periode du 
+                              <span t-field="o.date_from"/> au 
+                              <span t-field="o.date_to"/>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 col-offset-5">
+                          <table class="table table-bordered">
+                            <tr>
+                              <td>
+                                <span>Matricule :</span>
+                                <br/>
+                                <span>N° s.s :</span>
+                                <br/>
+                                <span>Emploi :</span>
+                                <br/>
+                                <span>Qualif :</span>
+                                <br/>
+                                <span>Part IR :</span>
+                                <br/>
+                                <span>Part TRIMF :</span>
+                                <br/>
+                                <span>Date Entrée :</span>
+                              </td>
+                              <td>
+                                <span t-esc="o.employee_id.id or '_'"/>
+                                <br/>
+                                <span t-esc="o.employee_id.identification_id or '_'"/>
+                                <br/>
+                                <span t-esc="o.contract_id.job_id.name or '_'"/>
+                                <br/>
+                                <span t-esc="o.contract_id.qualif or '_'"/>
+                                <br/>
+                                <span t-esc="o.contract_id.level or '_'"/>
+                                <br/>
+                                <span t-esc="o.contract_id.coefficient or '_'"/>
+                                <br/>
+                                <span t-esc="o.contract_id.date_start or '_'"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                        <div class="col-8 float-right" style="float:right;text-align:right;">
+                          <table class="table">
+                            <tr>
+                              <td>
+                                <span t-field="o.employee_id"/>
+                                <br/>
+                                <span t-field="o.employee_id.address_home_id.name"/>
+                                <br/>
+                                <span t-field="o.employee_id.phone"/>
+                                <br/>
+                                <span t-field="o.employee_id.work_email"/>
+                                <br/>
+                                <span> Catégorie :</span> <span t-esc="o.contract_id.convention_type.name or '_'"/>
+                                <br/>
+                                <span>Ancienneté :</span> <span t-esc="o.line_ids.filtered(lambda line: line.code == 'A600').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span> an(s) et </span> <span t-esc="o.line_ids.filtered(lambda line: line.code == 'A500').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span> mois</span> 
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                      <br/><br/>
+                      <table class="table table-sm table-bordered" style="margin-top:15;">
+                        <thead style="background-color:#5A8A9E; color:white; text-align:center;">
+                          <tr>
+                            <th rowspan="2">Code</th>
+                            <th rowspan="2">Désignation</th>
+                            <th rowspan="2">Base</th>
+                            <th colspan="3">Part Salariale </th>
+                            <th colspan="2">Part Patronale </th>
+                            <!--th>Montant Charges Patronales</th-->
+                          </tr>
+                          <tr>
+                            <th>Taux </th>
+                            <th>Gain </th>
+                            <th>Retenue </th>
+                            <th>Taux </th>
+                            <th>Retenu </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.financial_statements_display=='brut')" t-as="line">
+                              <td style="text-align:left;">
+                                <span t-esc="line.code or ''"/>
+                              </td>
+                              <td style="text-align:left;">
+                                <span t-esc="line.name or ''"/>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                                <span t-esc="line.total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                          </tr>
+
+                          <tr>
+                              <td style="text-align:left;">
+                              </td>
+                              <td style="text-align:center;">
+                                <span>Total Brut</span>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                                <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C400').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                          </tr>
+
+                          <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.financial_statements_display!='brut' and line.financial_statements_display!='noim')" t-as="line">
+                            <t t-if="(line.code != 'C1100' or line.code != 'C1200') and line.total != 0">
+                              <td style="text-align:left;">
+                                <span t-esc="line.code or ''"/>
+                              </td>
+                              <td style="text-align:left;">
+                                <span t-esc="line.name or ''"/>
+                              </td>
+                              <td style="text-align:right;">
+                                <t t-if="line.amount_select== 'percentage'">
+                                  <span t-esc="line.amount" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                </t>
+                                <t t-if="line.amount_select== 'fix'">
+                                  <span t-esc="line.quantity or ''"/>
+                                </t>
+                              </td>
+                              <td style="text-align:right;">
+                                <t t-if="line.amount_select == 'percentage'">
+                                  <span t-esc="line.rate if line.category_id.parent_id.code !='CONTS' else ''"/>
+                                </t>
+                              </td>
+                              <td style="text-align:left;">
+                              </td>
+                              <td style="text-align:right;">
+                                <t t-if="line.category_id.parent_id.code !='CONTS'">
+                                <span t-esc="line.total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                </t>
+                              </td>
+                              <td style="text-align:right;">
+                                <t t-if="line.amount_select == 'percentage'">
+                                  <span t-esc="line.rate if line.category_id.parent_id.code =='CONTS' else ''"/>
+                                </t>
+                              </td>
+                              <td style="text-align:right;">
+                                <t t-if="line.category_id.parent_id.code =='CONTS'">
+                                  <span t-esc="line.total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                </t>
+                              </td>
+                            </t>
+                          </tr>
+
+                          <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.financial_statements_display =='noim')" t-as="line">
+                              <td style="text-align:left;">
+                                <span t-esc="line.code or ''"/>
+                              </td>
+                              <td style="text-align:left;">
+                                <span t-esc="line.name or ''"/>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                                <span t-esc="line.total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                              <td style="text-align:right;">
+                              </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-round-border">
+                            <tr>
+                              <td>
+                                <div class="float-right"><strong>Net à payer </strong>: 
+                                                        <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C2000').total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.company_id.currency_id}"/>
+                                                    </div>
+                                <div class="mt15"><strong>Mode de réglement</strong> : 
+                                                        <span t-esc="o.payment_mode or ''"/>
+                                                    </div>
+                                <div class="mt15">
+                                  <t t-if="o.paid is True">
+                                    <strong>Payé</strong>
+                                  </t>
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                      <table class="table table-bordered text-center">
+                        <thead>
+                          <tr>
+                            <th>Cumuls</th>
+                            <th>Brut Imposable</th>
+                            <th>Total Charges Salariales</th>
+                            <th>Total Charges Patronales</th>
+                            <th>Net Imposable</th>
+                            <th>Avantage Nature</th>
+                            <th/>
+                            <th>Total versé par l'employeur</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Periode</td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C400').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C1701').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C1700').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'NETI500').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'TAV50').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td/>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C1900').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Annee</td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C5000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C6000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C7000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C10000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C8000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                            <td/>
+                            <td>
+                              <span t-esc="o.line_ids.filtered(lambda line: line.code == 'C9000').total" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p class="mt32">DANS VOTRE INTERET ET POUR VOUS AIDER A FAIRE VALOIR VOS DROITS, CONSERVEZ CE 
+            BULLETIN DE PAIE SANS LIMITATION DE DUREE</p>
+                    </div>
+                </div>
+            </xpath>
+    </template>
+</odoo>

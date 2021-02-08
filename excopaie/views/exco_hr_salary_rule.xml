@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="exco_hr_salary_rule_form" model="ir.ui.view">
+            <field name="name">exco.hr.salary.rule.form</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+            <field name="arch" type="xml">
+                <!-- find field description and add the field
+                     idea_ids after it -->
+                <xpath expr="//field[@name='appears_on_payslip']" position="after">
+                    <field name="financial_statements_display" string="Affichage dans les etats"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

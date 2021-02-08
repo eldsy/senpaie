@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <template id="exco_employer_charges_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="employee_id" t-value="[]"/>
+                    <t t-foreach="o.payslip_ids" t-as="l">
+                        <t t-if="l.employee_id not in employee_id">
+                            <t t-set="employee_id" t-value="employee_id+[l.employee_id]"/>
+                        </t>
+                    </t>
+                    <t t-set="line_codes" t-value="[]"/>
+                    <t t-set="line_id_list" t-value="[]"/>
+                    <t t-foreach="o.payslip_ids" t-as="sp">
+                      <t t-foreach="sp.line_ids" t-as="l">
+                        <t t-if="l.code not in line_codes">
+                            <t t-set="line_codes" t-value="line_codes+[l.code]"/>
+                            <t t-set="line_id_list" t-value="line_id_list+[l]"/>
+                        </t>
+                      </t>
+                    </t>
+                    <t t-call="web.internal_layout" t-foreach="range(int(len(employee_id)/7)+1)" t-as="number_page">
+                        <div class="page">
+                            <div class="header-rapport" style="text-align:center; border: 1.5px solid #1C6EA4;border-radius: 9px;padding:10px;margin:50px">
+                                <h3>Charges patronnales <span t-field="o.name"/></h3>
+                                <p style="font-size: 13px;">Periode du
+                                    <span t-field="o.date_from"/>
+                                    au
+                                    <span t-field="o.date_to"/> 
+                                </p>
+                            </div>
+
+                            <table class="table table-sm table-bordered" style="margin-top:10px;font-size: 9.7px;">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Designation</th>
+                                        <th t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id">
+                                            <span t-field="employee_id[index_employee_id + number_page*7].name"/>
+                                        </th>
+                                        <th t-if="number_page==int(len(employee_id)/7)">
+                                        <span>Total</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_ipres'">
+                                                <span t-field="line.code"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_ipres'">
+                                                <span t-field="line.name"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_ipres'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_ipres'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:yellow">
+                                        <td>
+                                            <span>
+                                              -
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                            Total IPRES
+                                            </span>
+                                        </td>
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1702').total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1702').total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_css'">
+                                                <span t-field="line.code"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_css'">
+                                                <span t-field="line.name"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_css'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_css'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:yellow">
+                                        <td>
+                                            <span>
+                                              -
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                            Total CSS
+                                            </span>
+                                        </td>
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1704').total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1704').total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_vrs'">
+                                                <span t-field="line.code"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_vrs'">
+                                                <span t-field="line.name"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_vrs'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_vrs'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:yellow">
+                                        <td>
+                                            <span>
+                                              -
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                            Total VRS
+                                            </span>
+                                        </td>
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1703').total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1703').total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_ipm'">
+                                                <span t-field="line.code"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span t-foreach="line_id_list" t-as="line">
+                                              <span t-if="line.financial_statements_display == 'chp_ipm'">
+                                                <span t-field="line.name"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_ipm'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-foreach="line_id_list" t-as="line_id">
+                                              <span t-if="line_id.financial_statements_display == 'chp_ipm'">
+                                                <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == line_id.code).total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                                <br/>
+                                              </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:yellow">
+                                        <td>
+                                            <span>
+                                              -
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                            Total IPM
+                                            </span>
+                                        </td>
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1705').total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'P1705').total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:yellow">
+                                        <td>
+                                            <span>
+                                              -
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                            Total
+                                            </span>
+                                        </td>
+                                        <td t-foreach="range(min(len(employee_id)-number_page*7, (number_page+1)*7))" t-as="index_employee_id" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'C1700').total for payslip in o.payslip_ids.filtered(lambda line: line.employee_id.id == employee_id[index_employee_id + number_page*7].id))" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                        <td t-if="number_page==int(len(employee_id)/7)" style="text-align:right;">
+                                            <span t-esc="sum(payslip.line_ids.filtered(lambda line: line.code == 'C1700').total for payslip in o.payslip_ids)" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
