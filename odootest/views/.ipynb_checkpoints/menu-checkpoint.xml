@@ -1,0 +1,7 @@
+<odoo>
+
+    <menuitem name="OdooTest" id="odootest.menu_root"/>
+    
+    <menuitem name="Marchants" id="odootest.merchant_menu" parent="odootest.menu_root"/>
+    <menuitem name="Devis et bons" id="odootest.quote_menu" parent="odootest.menu_root"/>
+</odoo>

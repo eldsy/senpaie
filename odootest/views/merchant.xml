@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="odootest.merchantlist">
+      <field name="name">odootest list</field>
+      <field name="model">odootest.odootest</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="odootest.merchant_action_window">
+      <field name="name">odootest window</field>
+      <field name="res_model">odootest.merchant</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+      
+
+    <menuitem name="Marchant" id="odootest.merchant" parent="odootest.menu_1"
+              action="odootest.merchant_action_window"/>
+  </data>
+</odoo>
