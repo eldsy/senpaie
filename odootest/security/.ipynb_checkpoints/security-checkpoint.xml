@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="entry_officer" model="res.groups">
+            <field name="name">Agent de saisi</field>
+        </record>
+        <record id="verification_officer" model="res.groups">
+            <field name="name">Agent de saisi</field>
+        </record>
+        <record id="validation_officer" model="res.groups">
+            <field name="name">Agent de saisi</field>
+        </record>
+    </data>
+</odoo>
