@@ -16,6 +16,19 @@ class Merchant(models.Model):
     ], default='created')
     
     
+    def post(self):
+        return {
+            'name': 'Commentaire',
+            'domain': [],
+            'res_model': 'odootest.rejection_comment',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'view_id': False,
+            'context': {},
+            'target': 'new',
+        }
+
+    
 class RejectionComment(models.Model):
     _name = 'odootest.rejection_comment'
     _description = 'Rejection Comment'
